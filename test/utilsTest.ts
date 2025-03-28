@@ -1,5 +1,5 @@
 import assert from "assert";
-import { add } from "../src/utils"; // Import your utility functions
+import { add } from "../src/utils";
 
 describe("Utils Test Suite", () => {
   describe("add()", () => {
