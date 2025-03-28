@@ -12,39 +12,77 @@ import {
 /*
  * Testing strategy for toBucketSets():
  *
- * TODO: Describe your testing strategy for toBucketSets() here.
+ * Testing strategy for toBucketSets():
+ * Empty BucketMap
+ * Buckets with non-sequential keys
+ * Buckets with different numbers of flashcards
  */
 describe("toBucketSets()", () => {
-  it("Example test case - replace with your own tests", () => {
-    assert.fail(
-      "Replace this test case with your own tests based on your testing strategy"
-    );
+  it("should return an empty array for an empty BucketMap", () => {
+    const buckets: BucketMap = new Map();
+    assert.deepStrictEqual(toBucketSets(buckets), []);
+  });
+
+  it("should handle non-sequential bucket keys", () => {
+    const card = new Flashcard("Q1", "A1", "Hint1", []);
+    const buckets: BucketMap = new Map([
+      [2, new Set([card])],
+    ]);
+    
+    const result = toBucketSets(buckets);
+    assert.deepStrictEqual(result, [new Set(), new Set(), new Set([card])]);
   });
 });
 
 /*
  * Testing strategy for getBucketRange():
  *
- * TODO: Describe your testing strategy for getBucketRange() here.
+ * Empty array
+ * Single bucket with cards
+ * Multiple buckets with cards in non-sequential order
  */
 describe("getBucketRange()", () => {
-  it("Example test case - replace with your own tests", () => {
-    assert.fail(
-      "Replace this test case with your own tests based on your testing strategy"
-    );
+  it("should return undefined for an empty bucket list", () => {
+    assert.strictEqual(getBucketRange([]), undefined);
+  });
+
+  it("should return the correct range for a single bucket", () => {
+    const card = new Flashcard("Q1", "A1", "Hint1", []);
+    assert.deepStrictEqual(getBucketRange([new Set([card])]), { minBucket: 0, maxBucket: 0 });
+  });
+
+  it("should return the correct min and max for multiple buckets", () => {
+    const card1 = new Flashcard("Q1", "A1", "Hint1", []);
+    const card2 = new Flashcard("Q2", "A2", "Hint2", []);
+    const buckets: Set<Flashcard>[] = [
+      new Set<Flashcard>([]),
+      new Set<Flashcard>([])
+    ];
+    
+    assert.deepStrictEqual(getBucketRange(buckets), { minBucket: 1, maxBucket: 3 });
   });
 });
 
 /*
  * Testing strategy for practice():
  *
- * TODO: Describe your testing strategy for practice() here.
+ * Empty buckets array
+ * Buckets with flashcards, checking correct selection per day
+ * Handling of different power-of-two day intervals
  */
 describe("practice()", () => {
-  it("Example test case - replace with your own tests", () => {
-    assert.fail(
-      "Replace this test case with your own tests based on your testing strategy"
-    );
+  it("should return an empty set for an empty buckets array", () => {
+    assert.deepStrictEqual(practice([], 0), new Set());
+  });
+
+  it("should select correct cards based on day number", () => {
+    const card1 = new Flashcard("Q1", "A1", "Hint1", []);
+    const card2 = new Flashcard("Q2", "A2", "Hint2", []);
+    const buckets = [new Set([card1]), new Set([card2])];
+    
+    assert.deepStrictEqual(practice(buckets, 0), new Set([card1, card2]));
+    assert.deepStrictEqual(practice(buckets, 1), new Set([card1]));
+    assert.deepStrictEqual(practice(buckets, 2), new Set([card1, card2]));
   });
 });
 
