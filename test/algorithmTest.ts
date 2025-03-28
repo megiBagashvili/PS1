@@ -89,15 +89,37 @@ describe("practice()", () => {
 /*
  * Testing strategy for update():
  *
- * TODO: Describe your testing strategy for update() here.
+ * Card is not in any bucket (throws error)
+ * Moving card to the next bucket (Easy)
+ * Moving card to the previous bucket (Hard)
+ * Keeping card in the same bucket (Wrong)
  */
 describe("update()", () => {
-  it("Example test case - replace with your own tests", () => {
-    assert.fail(
-      "Replace this test case with your own tests based on your testing strategy"
-    );
+  it("should throw an error if the card is not in any bucket", () => {
+    const buckets: BucketMap = new Map();
+    const card = new Flashcard("Q1", "A1", "Hint1", []);
+    assert.throws(() => update(buckets, card, AnswerDifficulty.Easy), /Card not found/);
+  });
+
+  it("should move the card to the next bucket on Easy", () => {
+    const card = new Flashcard("Q1", "A1", "Hint1", []);
+    const buckets: BucketMap = new Map([[0, new Set([card])], [1, new Set()]]);
+    
+    const updatedBuckets = update(buckets, card, AnswerDifficulty.Easy);
+    assert.strictEqual(updatedBuckets.get(0)?.has(card), false);
+    assert.strictEqual(updatedBuckets.get(1)?.has(card), true);
+  });
+
+  it("should move the card to the previous bucket on Hard", () => {
+    const card = new Flashcard("Q1", "A1", "Hint1", []);
+    const buckets: BucketMap = new Map([[1, new Set([card])], [0, new Set()]]);
+    
+    const updatedBuckets = update(buckets, card, AnswerDifficulty.Hard);
+    assert.strictEqual(updatedBuckets.get(1)?.has(card), false);
+    assert.strictEqual(updatedBuckets.get(0)?.has(card), true);
   });
 });
+
 
 /*
  * Testing strategy for getHint():
